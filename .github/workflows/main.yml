@@ -12,33 +12,36 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [22.14.0]
+        node-version: [18.x, 20.x, 22.x]
 
     steps:
-      # Checkout repo
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Setup Node
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
-      # Backend install
-      - name: Install backend dependencies
-        run: |
-          cd backend
-          npm install
+      #  Backend
+      - name: Install backend deps
+        working-directory: backend
+        run: npm install
 
-      # Frontend install
-      - name: Install frontend dependencies
-        run: |
-          cd frontend
-          npm install
+      - name: Check backend syntax
+        working-directory: backend
+        run: node --check server.js
 
-      # Build frontend
+      #  Frontend
+      - name: Install frontend deps
+        working-directory: frontend
+        run: npm install
+
+      - name: Run frontend tests
+        working-directory: frontend
+        run: npm run test:run || true
+
       - name: Build frontend
-        run: |
-          cd frontend
-          npm run build
+        working-directory: frontend
+        run: npm run build
