@@ -28,7 +28,7 @@ app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
-const PORT = 5000;
+const PORT = 3000;
 
 
 app.listen(PORT, () => {
