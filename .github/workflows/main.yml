@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [22.14.0]
+        node-version: [20x, 22x]
 
     steps:
       - name: Checkout code
@@ -24,23 +24,23 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      #  Backend
+      # Backend
       - name: Install backend deps
         working-directory: backend
-        run: npm install
+        run: npm ci
 
       - name: Check backend syntax
         working-directory: backend
         run: node --check server.js
 
-      #  Frontend
+      # Frontend
       - name: Install frontend deps
         working-directory: frontend
-        run: npm install
+        run: npm ci
 
       - name: Run frontend tests
         working-directory: frontend
-        run: npm run test:run || true 
+        run: npm run test:run || true
 
       - name: Build frontend
         working-directory: frontend
